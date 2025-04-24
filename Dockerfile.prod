@@ -30,7 +30,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Kopiujemy zbudowany frontend
-COPY --from=frontend /var/www/html/public ./public
+COPY --from=frontend /var/www/html/public/build ./public/build
 
 # Produkcyjna instalacja zależności
 RUN composer install --no-dev --optimize-autoloader && \
