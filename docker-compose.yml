@@ -1,44 +1,54 @@
-version: '3'
+version: '3.8'
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: laravel-app
-    volumes:
-      - ./:/var/www/html
-    working_dir: /var/www/html
-    expose:
-        - "9000"
-    networks:
-        - app-net
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile.prod
+        container_name: laravel-app
+        restart: unless-stopped
+        volumes:
+            - .:/var/www/html
+        working_dir: /var/www/html
+        expose:
+            - "9000"
+        networks:
+            - app-net
 
-  node:
-     image: node:18
-     container_name: vite
-     restart: unless-stopped
-     working_dir: /var/www/html
-     volumes:
-         - ./:/var/www/html
-     ports:
-         - "5173:5173"
-     command: sh -c "npm install && npm run dev"
-#     command: sh -c "while true; do sleep 60; done"
-     depends_on:
-         - app
+    mysql:
+        image: mysql:8.0
+        container_name: mysql
+        restart: unless-stopped
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: laravel
+            MYSQL_ROOT_PASSWORD: secret
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - app-net
 
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    restart: unless-stopped
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: secret
-    volumes:
-      - mysql_data:/var/lib/mysql
+    web:
+        image: caddy:2
+        container_name: caddy
+        ports:
+            - "80:80"
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile
+            - .:/var/www/html
+            - caddy_data:/data
+            - caddy_config:/config
+        depends_on:
+            - app
+        networks:
+            - app-net
 
 volumes:
-  mysql_data:
+    mysql_data:
+    caddy_data:
+    caddy_config:
+
+networks:
+    app-net:
+        driver: bridge

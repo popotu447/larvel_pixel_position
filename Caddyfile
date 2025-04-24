@@ -1,3 +1,5 @@
-ovh1.alt-f4.com.pl {
-    reverse_proxy app:8000
+http://ovh1.alt-f4.com.pl {
+    root * /var/www/html/public
+    php_fastcgi app:9000
+    file_server
 }
