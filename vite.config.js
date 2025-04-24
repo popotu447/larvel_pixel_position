@@ -17,6 +17,7 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
             buildDirectory: 'build', // 👈 Laravel szuka w public/build
+            manifest: true
         }),
     ],
     build: {
