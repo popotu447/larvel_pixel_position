@@ -16,13 +16,13 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
-            buildDirectory: 'build'
+            buildDirectory: 'build', // 👈 Laravel szuka w public/build
         }),
     ],
     build: {
         outDir: 'public/build',
         emptyOutDir: true,
-        manifest: true,
+        manifest: true, // 👈 wymusza wygenerowanie manifest.json
         rollupOptions: {
             input: ['resources/css/app.css', 'resources/js/app.js'],
         },
