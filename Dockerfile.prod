@@ -4,7 +4,7 @@ WORKDIR /var/www/html
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+RUN NODE_ENV=production npm run build
 
 # Etap 2: PHP + Laravel
 FROM php:8.2-fpm
