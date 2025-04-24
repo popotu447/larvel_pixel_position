@@ -7,7 +7,7 @@ export default defineConfig({
         port: 5173,
         strictPort: true,
         hmr: {
-            host: '127.0.0.1',     // zamiast 'localhost' lub '[::1]'
+            host: '127.0.0.1',
             protocol: 'ws',
             port: 5173,
         },
@@ -18,4 +18,12 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    build: {
+        outDir: 'public/build',
+        emptyOutDir: true,
+        manifest: true,
+        rollupOptions: {
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+        },
+    },
 })
