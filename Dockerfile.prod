@@ -1,6 +1,6 @@
 # Etap 1: Budowanie frontendu Vite
 FROM node:18 as frontend
-WORKDIR /app
+WORKDIR /var/www/html
 COPY package*.json ./
 RUN npm install
 COPY . .
@@ -30,7 +30,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Kopiujemy zbudowany frontend
-COPY --from=frontend /app/public/build ./public/build
+COPY --from=frontend /var/www/html/public/build ./public/build
 
 # Produkcyjna instalacja zależności
 RUN composer install --no-dev --optimize-autoloader && \
