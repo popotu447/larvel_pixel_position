@@ -1,5 +1,5 @@
-http://ovh1.alt-f4.com.pl {
+ovh1.alt-f4.com.pl {
     root * /var/www/html/public
-    php_fastcgi app:9000
+    php_fastcgi laravel-app:9000
     file_server
 }

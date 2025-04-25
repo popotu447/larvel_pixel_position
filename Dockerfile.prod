@@ -1,12 +1,3 @@
-# Etap 1: Budowanie frontendu Vite
-FROM node:18 as frontend
-WORKDIR /var/www/html
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN NODE_ENV=production npm run build
-
-# Etap 2: PHP + Laravel
 FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y \
@@ -27,15 +18,5 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-COPY . .
-
-# Kopiujemy zbudowany frontend
-COPY --from=frontend /var/www/html/public/build ./public/build
-
-# Produkcyjna instalacja zależności
-RUN composer install --no-dev --optimize-autoloader && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
-
-CMD ["php-fpm"]
+# Opcjonalnie: preload opcache i instalacja zależności
+RUN docker-php-ext-install opcache
