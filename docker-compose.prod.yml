@@ -6,21 +6,21 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: laravel-app
-    volumes:
-      - ./:/var/www/html
     working_dir: /var/www/html
-    depends_on:
-      - mysql
     environment:
       APP_ENV: production
     command: sh -c "php artisan migrate --force && php-fpm"
+    volumes:
+      - .:/var/www/html # Możesz usunąć ten volume później, jak skopiujesz kod do obrazu!
+    depends_on:
+      - mysql
 
   node:
     image: node:18
     container_name: vite
     working_dir: /var/www/html
     volumes:
-      - ./:/var/www/html
+      - .:/var/www/html
     command: sh -c "npm ci && npm run build"
     profiles: ["build"]
 
@@ -37,17 +37,17 @@ services:
   caddy:
     image: caddy:latest
     container_name: caddy
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./:/var/www/html
+      - .:/var/www/html
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
       - app
-
 
 volumes:
   mysql_data:
