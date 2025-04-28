@@ -9,7 +9,7 @@ services:
     working_dir: /var/www/html
     environment:
       APP_ENV: production
-    command: sh -c "php artisan migrate --force && php-fpm"
+    command: sh -c "php-fpm"
     volumes:
       - .:/var/www/html # Możesz usunąć ten volume później, jak skopiujesz kod do obrazu!
     depends_on:
